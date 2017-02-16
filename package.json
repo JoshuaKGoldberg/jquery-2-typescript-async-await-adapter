@@ -1,0 +1,44 @@
+{
+  "name": "jquery-2-typescript-async-await-adapter",
+  "version": "0.1.0",
+  "description": "Adapts TypeScript's async/await to work with jQuery 2's JQueryPromise instead",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshuakgoldberg/jquery-2-typescript-async-await-adapter.git"
+  },
+  "keywords": [
+    "jquery",
+    "2",
+    "async",
+    "await",
+    "typescript",
+    "promises",
+    "deferred",
+    "adapter"
+  ],
+  "author": "joshuakgoldberg@outlook.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joshuakgoldberg/jquery-2-typescript-async-await-adapter/issues"
+  },
+  "homepage": "https://github.com/joshuakgoldberg/jquery-2-typescript-async-await-adapter#readme",
+  "devDependencies": {
+    "@types/chai": "^3.4.34",
+    "@types/es6-promise": "0.0.32",
+    "@types/jquery": "^2.0.40",
+    "@types/mocha": "^2.2.39",
+    "chai": "^3.5.0",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-mocha-phantomjs": "^0.12.0",
+    "gulp-sourcemaps": "^2.4.1",
+    "gulp-typescript": "^3.1.5",
+    "merge2": "^1.0.3",
+    "mocha": "^3.2.0"
+  },
+  "dependencies": {
+    "jquery": "^2.2.4",
+    "typescript": "^2.1.6"
+  }
+}
