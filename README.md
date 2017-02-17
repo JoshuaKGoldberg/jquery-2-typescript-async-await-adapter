@@ -12,7 +12,7 @@ Include `lib/index.js` so that it's run before any code uses the `await` keyword
 ## Technical Details
 
 TypeScript emits global `__awaiter` and `__generator` methods for `async/await` code.
-Those assume the existance of a `Promise` constructor and other sane standards.
+Those assume the existence of a `Promise` constructor and other sane standards.
 This library replaces them with near-identical versions that instead use `$.Deferred().promise()`.
 
 
