@@ -35,6 +35,36 @@ describe("async/await", () => {
         expect(awaited).to.be.equal(value);
     });
 
+    it("returns an awaited promise's .then's value", async () => {
+        // Arrange
+        const value = "value";
+
+        // Act
+        const promise = $.Deferred().resolve().promise();
+        const awaited = await promise.then(function () {
+            return value;
+        });
+
+        // Assert
+        expect(awaited).to.be.equal(value);
+    });
+
+    it("returns an awaited promise's .then chain's value", async () => {
+        // Arrange
+        const value = "value";
+
+        // Act
+        const promise = $.Deferred().resolve().promise();
+        const awaited = await promise
+            .then(function () { })
+            .then(function () {
+                return value;
+            });
+
+        // Assert
+        expect(awaited).to.be.equal(value);
+    });
+
     it("catches a synchronously thrown value", async () => {
         // Arrange
         const message = "This should be caught";
