@@ -269,7 +269,7 @@ describe("async/await", function () {
             }
         });
     }); });
-    it("resumes a chain after catching an error", function () { return __awaiter(_this, void 0, void 0, function () {
+    it("returns through a chain after catching an error", function () { return __awaiter(_this, void 0, void 0, function () {
         var value, promise, awaited;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -292,7 +292,7 @@ describe("async/await", function () {
             }
         });
     }); });
-    it("resumes a chain after catching two errors", function () { return __awaiter(_this, void 0, void 0, function () {
+    it("returns through a chain after catching two errors", function () { return __awaiter(_this, void 0, void 0, function () {
         var value, promise, awaited;
         return __generator(this, function (_a) {
             switch (_a.label) {

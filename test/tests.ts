@@ -192,7 +192,7 @@ describe("async/await", () => {
             .catch(error => chai.expect(error.message).to.be.equal(secondMessage));
     });
 
-    it("resumes a chain after catching an error", async () => {
+    it("returns through a chain after catching an error", async () => {
         // Arrange
         const value = "value";
 
@@ -212,7 +212,7 @@ describe("async/await", () => {
         expect(awaited).to.be.equal(value);
     });
 
-    it("resumes a chain after catching two errors", async () => {
+    it("returns through a chain after catching two errors", async () => {
         // Arrange
         const value = "value";
 
