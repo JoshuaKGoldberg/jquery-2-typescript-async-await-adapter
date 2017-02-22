@@ -7,6 +7,8 @@ interface JQueryPromise<T> {
 }
 
 describe("async/await", () => {
+    window.onerror = function () { debugger; };
+
     it("executes in the correct order", async () => {
         // Arrange
         const order = [];
@@ -79,6 +81,36 @@ describe("async/await", () => {
         await promise.catch(error => expect(error.message).to.be.equal(message));
     });
 
+    it("catches a synchronously thrown value after a chain", async () => {
+        // Arrange
+        const message = "This should be caught";
+
+        // Act
+        const promise = $.Deferred().resolve().promise()
+            .then(() => {})
+            .then(() => {
+                throw new Error(message);
+            });
+
+        // Assert
+        await promise.catch(error => expect(error.message).to.be.equal(message));
+    });
+
+    it("catches a synchronously thrown value before a chain", async () => {
+        // Arrange
+        const message = "This should be caught";
+
+        // Act
+        const promise = $.Deferred().resolve().promise()
+            .then(() => {
+                throw new Error(message);
+            })
+            .then(() => {});
+
+        // Assert
+        await promise.catch(error => expect(error.message).to.be.equal(message));
+    });
+
     it("catches an asynchronously thrown value", async () => {
         // Arrange
         const message = "This should be caught";
@@ -94,7 +126,45 @@ describe("async/await", () => {
 
         // Assert
         await promise
-            .catch(error => chai.expect(error.message).to.be.equal(message))
+            .catch(error => chai.expect(error.message).to.be.equal(message));
+    });
+
+    it("catches an asynchronously thrown value before a chain", async () => {
+        // Arrange
+        const message = "This should be caught";
+
+        // Act
+        const deferred = $.Deferred();
+        const promise = deferred.promise()
+            .then(() => {
+                throw new Error(message);
+            })
+            .then(() => {});
+
+        setTimeout(deferred.resolve);
+
+        // Assert
+        await promise
+            .catch(error => chai.expect(error.message).to.be.equal(message));
+    });
+
+    it("catches an asynchronously thrown value after a chain", async () => {
+        // Arrange
+        const message = "This should be caught";
+
+        // Act
+        const deferred = $.Deferred();
+        const promise = deferred.promise()
+            .then(() => {})
+            .then(() => {
+                throw new Error(message);
+            });
+
+        setTimeout(deferred.resolve);
+
+        // Assert
+        await promise
+            .catch(error => chai.expect(error.message).to.be.equal(message));
     });
 
     it("catches a second thrown error after a first thrown error", async () => {
@@ -119,7 +189,55 @@ describe("async/await", () => {
 
         // Assert
         await promise
-            .catch(error => chai.expect(error.message).to.be.equal(secondMessage))
+            .catch(error => chai.expect(error.message).to.be.equal(secondMessage));
+    });
+
+    it("resumes a chain after catching an error", async () => {
+        // Arrange
+        const value = "value";
+
+        // Act
+        const promise = $.Deferred()
+            .resolve()
+            .then(() => {
+                throw new Error();
+            })
+            .catch(() => {})
+            .then(() => value)
+            .promise();
+
+        const awaited = await promise;
+
+        // Assert
+        expect(awaited).to.be.equal(value);
+    });
+
+    it("resumes a chain after catching two errors", async () => {
+        // Arrange
+        const value = "value";
+
+        // Act
+        const promise = $.Deferred()
+            .resolve()
+            .then(() => {
+                throw new Error();
+            })
+            .catch(() => {})
+            .then(() => {
+                throw new Error();
+            })
+            .catch(() => {})
+            .then(() => value)
+            .promise();
+
+        const awaited = await promise;
+
+        // Assert
+        expect(awaited).to.be.equal(value);
+    });
+
+    it("throws", async () => {
+        throw new Error("This last test should fail, to demonstrate errors aren't swallowed");
     });
 });
 
