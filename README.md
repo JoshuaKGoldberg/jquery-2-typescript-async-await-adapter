@@ -6,7 +6,7 @@ Replaces TypeScript's generated `async/await` support code so jQuery 2's crappy 
 ## Usage
 
 This only works in the browser with jQuery 2 and TypeScript >= 2.1 set to output ES3 or ES5 JavaScript.
-Include `lib/index.js` so that it's run before any code uses the `await` keyword.
+Include `lib/index.js` so that it's run before any code using the `await` keyword.
 
 
 ## Technical Details
