@@ -67,6 +67,25 @@ describe("async/await", () => {
         expect(awaited).to.be.equal(value);
     });
 
+    it("passes a value through a .then chain", async () => {
+        // Arrange
+        const originalValue = "value";
+        let passedValue;
+
+        // Act
+        const promise = $.Deferred().resolve().promise();
+        const awaited = await promise
+            .then(function () {
+                return originalValue;
+            })
+            .then(function (receivedValue) {
+                passedValue = receivedValue;
+            });
+
+        // Assert
+        expect(awaited).to.be.equal(originalValue);
+    });
+
     it("catches a synchronously thrown value", async () => {
         // Arrange
         const message = "This should be caught";
