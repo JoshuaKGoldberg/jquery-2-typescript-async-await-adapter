@@ -113,20 +113,35 @@ describe("async/await", function () {
             }
         });
     }); });
-    it("passes a value through a .then chain", function () { return __awaiter(_this, void 0, void 0, function () {
-        var originalValue, passedValue, promise, awaited;
+    it("passes a value through a chain of two .then passes", function () { return __awaiter(_this, void 0, void 0, function () {
+        var originalValue, promise, awaited;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     originalValue = "value";
                     promise = $.Deferred().resolve().promise();
                     return [4 /*yield*/, promise
-                            .then(function () {
-                            return originalValue;
-                        })
-                            .then(function (receivedValue) {
-                            passedValue = receivedValue;
-                        })];
+                            .then(function () { return originalValue; })
+                            .then(function (receivedValue) { return receivedValue; })];
+                case 1:
+                    awaited = _a.sent();
+                    // Assert
+                    expect(awaited).to.be.equal(originalValue);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it("passes a value through a chain of three .then passes", function () { return __awaiter(_this, void 0, void 0, function () {
+        var originalValue, promise, awaited;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    originalValue = "value";
+                    promise = $.Deferred().resolve().promise();
+                    return [4 /*yield*/, promise
+                            .then(function () { return originalValue; })
+                            .then(function (receivedValue) { return receivedValue; })
+                            .then(function (receivedValue) { return receivedValue; })];
                 case 1:
                     awaited = _a.sent();
                     // Assert

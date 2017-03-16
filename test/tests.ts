@@ -67,20 +67,30 @@ describe("async/await", () => {
         expect(awaited).to.be.equal(value);
     });
 
-    it("passes a value through a .then chain", async () => {
+    it("passes a value through a chain of two .then passes", async () => {
         // Arrange
         const originalValue = "value";
-        let passedValue;
 
         // Act
         const promise = $.Deferred().resolve().promise();
         const awaited = await promise
-            .then(function () {
-                return originalValue;
-            })
-            .then(function (receivedValue) {
-                passedValue = receivedValue;
-            });
+            .then(() => originalValue)
+            .then(receivedValue => receivedValue);
+
+        // Assert
+        expect(awaited).to.be.equal(originalValue);
+    });
+
+    it("passes a value through a chain of three .then passes", async () => {
+        // Arrange
+        const originalValue = "value";
+
+        // Act
+        const promise = $.Deferred().resolve().promise();
+        const awaited = await promise
+            .then(() => originalValue)
+            .then(receivedValue => receivedValue)
+            .then(receivedValue => receivedValue);
 
         // Assert
         expect(awaited).to.be.equal(originalValue);
