@@ -150,6 +150,23 @@ describe("async/await", function () {
             }
         });
     }); });
+    it("waits on timed promises", function () { return __awaiter(_this, void 0, void 0, function () {
+        var value, deferred, awaited;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    value = "value";
+                    deferred = $.Deferred();
+                    return [4 /*yield*/, deferred.promise()];
+                case 1:
+                    awaited = _a.sent();
+                    setTimeout(deferred.resolve, 10);
+                    // Assert
+                    expect(awaited).to.be.equal(value);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     it("catches a synchronously thrown value", function () { return __awaiter(_this, void 0, void 0, function () {
         var message, promise;
         return __generator(this, function (_a) {

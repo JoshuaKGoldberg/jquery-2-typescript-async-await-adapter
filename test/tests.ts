@@ -96,6 +96,19 @@ describe("async/await", () => {
         expect(awaited).to.be.equal(originalValue);
     });
 
+    it("waits on timed promises", async () => {
+        // Arrange
+        const value = "value";
+        const deferred = $.Deferred<string>();
+
+        // Act
+        const awaited = await deferred.promise();
+        setTimeout(deferred.resolve, 10);
+
+        // Assert
+        expect(awaited).to.be.equal(value);
+    });
+
     it("catches a synchronously thrown value", async () => {
         // Arrange
         const message = "This should be caught";
