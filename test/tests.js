@@ -37,7 +37,7 @@ var expect = chai.expect;
 mocha.setup("bdd");
 function fakeAsyncFunction(test) {
     return function (done) {
-        test(done);
+        test(done).catch(done);
     };
 }
 describe("async/await", function () {

@@ -6,16 +6,16 @@ interface JQueryPromise<T> {
     catch(error: any): this;
 }
 
-function fakeAsyncFunction(test: (done: () => void) => Promise<void>): (done: () => void) => void {
-    return (done: () => void): void => {
-        test(done);
+function fakeAsyncFunction(test: (done: MochaDone) => Promise<void>): (done: MochaDone) => void {
+    return (done: MochaDone): void => {
+        test(done).catch(done);
     };
 }
 
 describe("async/await", function () {
     this.timeout(100);
 
-    it("executes in the correct order", fakeAsyncFunction(async (done: () => void) => {
+    it("executes in the correct order", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const order = [];
 
@@ -32,7 +32,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("returns an awaited value", fakeAsyncFunction(async (done: () => void) => {
+    it("returns an awaited value", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const value = "value";
 
@@ -45,7 +45,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("returns an awaited promise's .then's value", fakeAsyncFunction(async (done: () => void) => {
+    it("returns an awaited promise's .then's value", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const value = "value";
 
@@ -60,7 +60,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("returns an awaited promise's .then chain's value", fakeAsyncFunction(async (done: () => void) => {
+    it("returns an awaited promise's .then chain's value", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const value = "value";
 
@@ -77,7 +77,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("passes a value through a chain of two .then passes", fakeAsyncFunction(async (done: () => void) => {
+    it("passes a value through a chain of two .then passes", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const originalValue = "value";
 
@@ -92,7 +92,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("passes a value through a chain of three .then passes", fakeAsyncFunction(async (done: () => void) => {
+    it("passes a value through a chain of three .then passes", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const originalValue = "value";
 
@@ -108,7 +108,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("waits on a timed promise", fakeAsyncFunction(async (done: () => void) => {
+    it("waits on a timed promise", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const value = "value";
         const deferred = $.Deferred();
@@ -122,7 +122,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("waits on two timed promises", fakeAsyncFunction(async (done: () => void) => {
+    it("waits on two timed promises", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const value = "value";
         const deferredA = $.Deferred();
@@ -140,7 +140,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("catches a synchronously thrown value", fakeAsyncFunction(async (done: () => void) => {
+    it("catches a synchronously thrown value", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const message = "This should be caught";
 
@@ -155,7 +155,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("catches a synchronously thrown value after a chain", fakeAsyncFunction(async (done: () => void) => {
+    it("catches a synchronously thrown value after a chain", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const message = "This should be caught";
 
@@ -171,7 +171,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("catches a synchronously thrown value before a chain", fakeAsyncFunction(async (done: () => void) => {
+    it("catches a synchronously thrown value before a chain", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const message = "This should be caught";
 
@@ -187,7 +187,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("catches an asynchronously thrown value", fakeAsyncFunction(async (done: () => void) => {
+    it("catches an asynchronously thrown value", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const message = "This should be caught";
 
@@ -206,7 +206,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("catches an asynchronously thrown value before a chain", fakeAsyncFunction(async (done: () => void) => {
+    it("catches an asynchronously thrown value before a chain", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const message = "This should be caught";
 
@@ -226,7 +226,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("catches an asynchronously thrown value after a chain", fakeAsyncFunction(async (done: () => void) => {
+    it("catches an asynchronously thrown value after a chain", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const message = "This should be caught";
 
@@ -246,7 +246,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("catches a second thrown error after a first thrown error", fakeAsyncFunction(async (done: () => void) => {
+    it("catches a second thrown error after a first thrown error", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const firstMessage = "This should be caught first";
         const secondMessage = "This should be caught second";
@@ -272,7 +272,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("returns through a chain after catching an error", fakeAsyncFunction(async (done: () => void) => {
+    it("returns through a chain after catching an error", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const value = "value";
 
@@ -293,7 +293,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("returns through a chain after catching two errors", fakeAsyncFunction(async (done: () => void) => {
+    it("returns through a chain after catching two errors", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const value = "value";
 
@@ -318,7 +318,7 @@ describe("async/await", function () {
         done();
     }));
 
-    it("returns through a caught error in a try/catch block", fakeAsyncFunction(async (done: () => void) => {
+    it("returns through a caught error in a try/catch block", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
         const error = new Error();
         let caughtError;
