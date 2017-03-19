@@ -33,12 +33,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 var expect = chai.expect;
 mocha.setup("bdd");
+function fakeAsyncFunction(test) {
+    return function (done) {
+        test(done);
+    };
+}
 describe("async/await", function () {
-    window.onerror = function () { debugger; };
-    it("executes in the correct order", function () { return __awaiter(_this, void 0, void 0, function () {
+    var _this = this;
+    this.timeout(100);
+    it("executes in the correct order", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var order;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -55,11 +60,12 @@ describe("async/await", function () {
                     order.push(3);
                     // Assert
                     expect(order).to.be.deep.equal([1, 2, 3]);
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("returns an awaited value", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("returns an awaited value", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var value, promise, awaited;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -71,11 +77,12 @@ describe("async/await", function () {
                     awaited = _a.sent();
                     // Assert
                     expect(awaited).to.be.equal(value);
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("returns an awaited promise's .then's value", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("returns an awaited promise's .then's value", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var value, promise, awaited;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -89,11 +96,12 @@ describe("async/await", function () {
                     awaited = _a.sent();
                     // Assert
                     expect(awaited).to.be.equal(value);
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("returns an awaited promise's .then chain's value", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("returns an awaited promise's .then chain's value", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var value, promise, awaited;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -109,11 +117,12 @@ describe("async/await", function () {
                     awaited = _a.sent();
                     // Assert
                     expect(awaited).to.be.equal(value);
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("passes a value through a chain of two .then passes", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("passes a value through a chain of two .then passes", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var originalValue, promise, awaited;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -127,11 +136,12 @@ describe("async/await", function () {
                     awaited = _a.sent();
                     // Assert
                     expect(awaited).to.be.equal(originalValue);
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("passes a value through a chain of three .then passes", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("passes a value through a chain of three .then passes", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var originalValue, promise, awaited;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -146,28 +156,55 @@ describe("async/await", function () {
                     awaited = _a.sent();
                     // Assert
                     expect(awaited).to.be.equal(originalValue);
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("waits on timed promises", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("waits on a timed promise", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var value, deferred, awaited;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     value = "value";
                     deferred = $.Deferred();
+                    // Act
+                    setTimeout(deferred.resolve, 10);
                     return [4 /*yield*/, deferred.promise()];
                 case 1:
                     awaited = _a.sent();
-                    setTimeout(deferred.resolve, 10);
                     // Assert
                     expect(awaited).to.be.equal(value);
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("catches a synchronously thrown value", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("waits on two timed promises", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
+        var value, deferredA, deferredB, awaited;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    value = "value";
+                    deferredA = $.Deferred();
+                    deferredB = $.Deferred();
+                    // Act
+                    setTimeout(deferredA.resolve, 10);
+                    return [4 /*yield*/, deferredA.promise()];
+                case 1:
+                    _a.sent();
+                    setTimeout(deferredB.resolve, 20);
+                    return [4 /*yield*/, deferredB.promise()];
+                case 2:
+                    awaited = _a.sent();
+                    // Assert
+                    expect(awaited).to.be.equal(value);
+                    done();
+                    return [2 /*return*/];
+            }
+        });
+    }); }));
+    it("catches a synchronously thrown value", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var message, promise;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -182,11 +219,12 @@ describe("async/await", function () {
                 case 1:
                     // Assert
                     _a.sent();
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("catches a synchronously thrown value after a chain", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("catches a synchronously thrown value after a chain", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var message, promise;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -202,11 +240,12 @@ describe("async/await", function () {
                 case 1:
                     // Assert
                     _a.sent();
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("catches a synchronously thrown value before a chain", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("catches a synchronously thrown value before a chain", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var message, promise;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -222,11 +261,12 @@ describe("async/await", function () {
                 case 1:
                     // Assert
                     _a.sent();
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("catches an asynchronously thrown value", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("catches an asynchronously thrown value", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var message, deferred, promise;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -244,11 +284,12 @@ describe("async/await", function () {
                 case 1:
                     // Assert
                     _a.sent();
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("catches an asynchronously thrown value before a chain", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("catches an asynchronously thrown value before a chain", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var message, deferred, promise;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -267,11 +308,12 @@ describe("async/await", function () {
                 case 1:
                     // Assert
                     _a.sent();
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("catches an asynchronously thrown value after a chain", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("catches an asynchronously thrown value after a chain", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var message, deferred, promise;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -290,11 +332,12 @@ describe("async/await", function () {
                 case 1:
                     // Assert
                     _a.sent();
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("catches a second thrown error after a first thrown error", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("catches a second thrown error after a first thrown error", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var firstMessage, secondMessage, deferred, promise;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -319,11 +362,12 @@ describe("async/await", function () {
                 case 1:
                     // Assert
                     _a.sent();
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("returns through a chain after catching an error", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("returns through a chain after catching an error", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var value, promise, awaited;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -342,11 +386,12 @@ describe("async/await", function () {
                     awaited = _a.sent();
                     // Assert
                     expect(awaited).to.be.equal(value);
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("returns through a chain after catching two errors", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("returns through a chain after catching two errors", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var value, promise, awaited;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -369,15 +414,28 @@ describe("async/await", function () {
                     awaited = _a.sent();
                     // Assert
                     expect(awaited).to.be.equal(value);
+                    done();
                     return [2 /*return*/];
             }
         });
-    }); });
-    it("throws", function () { return __awaiter(_this, void 0, void 0, function () {
+    }); }));
+    it("returns through a caught error in a try/catch block", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
+        var error, caughtError;
         return __generator(this, function (_a) {
-            throw new Error("This last test should fail, to demonstrate errors aren't swallowed");
+            error = new Error();
+            // Act
+            try {
+                throw error;
+            }
+            catch (error) {
+                caughtError = error;
+            }
+            // Assert
+            expect(caughtError).to.be.equal(error);
+            done();
+            return [2 /*return*/];
         });
-    }); });
+    }); }));
 });
 mocha.run();
 //# sourceMappingURL=tests.js.map

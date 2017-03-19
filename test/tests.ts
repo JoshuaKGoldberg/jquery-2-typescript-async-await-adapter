@@ -6,10 +6,16 @@ interface JQueryPromise<T> {
     catch(error: any): this;
 }
 
-describe("async/await", () => {
-    window.onerror = function () { debugger; };
+function fakeAsyncFunction(test: (done: () => void) => Promise<void>): (done: () => void) => void {
+    return (done: () => void): void => {
+        test(done);
+    };
+}
 
-    it("executes in the correct order", async () => {
+describe("async/await", function () {
+    this.timeout(100);
+
+    it("executes in the correct order", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const order = [];
 
@@ -23,9 +29,10 @@ describe("async/await", () => {
 
         // Assert
         expect(order).to.be.deep.equal([1,2,3]);
-    });
+        done();
+    }));
 
-    it("returns an awaited value", async () => {
+    it("returns an awaited value", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const value = "value";
 
@@ -35,9 +42,10 @@ describe("async/await", () => {
 
         // Assert
         expect(awaited).to.be.equal(value);
-    });
+        done();
+    }));
 
-    it("returns an awaited promise's .then's value", async () => {
+    it("returns an awaited promise's .then's value", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const value = "value";
 
@@ -49,9 +57,10 @@ describe("async/await", () => {
 
         // Assert
         expect(awaited).to.be.equal(value);
-    });
+        done();
+    }));
 
-    it("returns an awaited promise's .then chain's value", async () => {
+    it("returns an awaited promise's .then chain's value", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const value = "value";
 
@@ -65,9 +74,10 @@ describe("async/await", () => {
 
         // Assert
         expect(awaited).to.be.equal(value);
-    });
+        done();
+    }));
 
-    it("passes a value through a chain of two .then passes", async () => {
+    it("passes a value through a chain of two .then passes", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const originalValue = "value";
 
@@ -79,9 +89,10 @@ describe("async/await", () => {
 
         // Assert
         expect(awaited).to.be.equal(originalValue);
-    });
+        done();
+    }));
 
-    it("passes a value through a chain of three .then passes", async () => {
+    it("passes a value through a chain of three .then passes", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const originalValue = "value";
 
@@ -94,22 +105,42 @@ describe("async/await", () => {
 
         // Assert
         expect(awaited).to.be.equal(originalValue);
-    });
+        done();
+    }));
 
-    it("waits on timed promises", async () => {
+    it("waits on a timed promise", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const value = "value";
-        const deferred = $.Deferred<string>();
+        const deferred = $.Deferred();
 
         // Act
-        const awaited = await deferred.promise();
         setTimeout(deferred.resolve, 10);
+        const awaited = await deferred.promise();
 
         // Assert
         expect(awaited).to.be.equal(value);
-    });
+        done();
+    }));
 
-    it("catches a synchronously thrown value", async () => {
+    it("waits on two timed promises", fakeAsyncFunction(async (done: () => void) => {
+        // Arrange
+        const value = "value";
+        const deferredA = $.Deferred();
+        const deferredB = $.Deferred();
+
+        // Act
+        setTimeout(deferredA.resolve, 10);
+        await deferredA.promise();
+
+        setTimeout(deferredB.resolve, 20);
+        const awaited = await deferredB.promise();
+
+        // Assert
+        expect(awaited).to.be.equal(value);
+        done();
+    }));
+
+    it("catches a synchronously thrown value", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const message = "This should be caught";
 
@@ -121,9 +152,10 @@ describe("async/await", () => {
 
         // Assert
         await promise.catch(error => expect(error.message).to.be.equal(message));
-    });
+        done();
+    }));
 
-    it("catches a synchronously thrown value after a chain", async () => {
+    it("catches a synchronously thrown value after a chain", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const message = "This should be caught";
 
@@ -136,9 +168,10 @@ describe("async/await", () => {
 
         // Assert
         await promise.catch(error => expect(error.message).to.be.equal(message));
-    });
+        done();
+    }));
 
-    it("catches a synchronously thrown value before a chain", async () => {
+    it("catches a synchronously thrown value before a chain", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const message = "This should be caught";
 
@@ -151,9 +184,10 @@ describe("async/await", () => {
 
         // Assert
         await promise.catch(error => expect(error.message).to.be.equal(message));
-    });
+        done();
+    }));
 
-    it("catches an asynchronously thrown value", async () => {
+    it("catches an asynchronously thrown value", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const message = "This should be caught";
 
@@ -169,9 +203,10 @@ describe("async/await", () => {
         // Assert
         await promise
             .catch(error => chai.expect(error.message).to.be.equal(message));
-    });
+        done();
+    }));
 
-    it("catches an asynchronously thrown value before a chain", async () => {
+    it("catches an asynchronously thrown value before a chain", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const message = "This should be caught";
 
@@ -188,9 +223,10 @@ describe("async/await", () => {
         // Assert
         await promise
             .catch(error => chai.expect(error.message).to.be.equal(message));
-    });
+        done();
+    }));
 
-    it("catches an asynchronously thrown value after a chain", async () => {
+    it("catches an asynchronously thrown value after a chain", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const message = "This should be caught";
 
@@ -207,9 +243,10 @@ describe("async/await", () => {
         // Assert
         await promise
             .catch(error => chai.expect(error.message).to.be.equal(message));
-    });
+        done();
+    }));
 
-    it("catches a second thrown error after a first thrown error", async () => {
+    it("catches a second thrown error after a first thrown error", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const firstMessage = "This should be caught first";
         const secondMessage = "This should be caught second";
@@ -232,9 +269,10 @@ describe("async/await", () => {
         // Assert
         await promise
             .catch(error => chai.expect(error.message).to.be.equal(secondMessage));
-    });
+        done();
+    }));
 
-    it("returns through a chain after catching an error", async () => {
+    it("returns through a chain after catching an error", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const value = "value";
 
@@ -252,9 +290,10 @@ describe("async/await", () => {
 
         // Assert
         expect(awaited).to.be.equal(value);
-    });
+        done();
+    }));
 
-    it("returns through a chain after catching two errors", async () => {
+    it("returns through a chain after catching two errors", fakeAsyncFunction(async (done: () => void) => {
         // Arrange
         const value = "value";
 
@@ -276,11 +315,25 @@ describe("async/await", () => {
 
         // Assert
         expect(awaited).to.be.equal(value);
-    });
+        done();
+    }));
 
-    it("throws", async () => {
-        throw new Error("This last test should fail, to demonstrate errors aren't swallowed");
-    });
+    it("returns through a caught error in a try/catch block", fakeAsyncFunction(async (done: () => void) => {
+        // Arrange
+        const error = new Error();
+        let caughtError;
+
+        // Act
+        try {
+            throw error;
+        } catch (error) {
+            caughtError = error;
+        }
+
+        // Assert
+        expect(caughtError).to.be.equal(error);
+        done();
+    }));
 });
 
 mocha.run();
