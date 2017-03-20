@@ -13,7 +13,7 @@ function fakeAsyncFunction(test: (done: MochaDone) => Promise<void>): (done: Moc
 }
 
 describe("async/await", function () {
-    this.timeout(100);
+    this.timeout(350);
 
     it("executes in the correct order", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
@@ -114,7 +114,7 @@ describe("async/await", function () {
         const deferred = $.Deferred();
 
         // Act
-        setTimeout(deferred.resolve, 10);
+        setTimeout(() => deferred.resolve(value), 10);
         const awaited = await deferred.promise();
 
         // Assert
@@ -132,7 +132,7 @@ describe("async/await", function () {
         setTimeout(deferredA.resolve, 10);
         await deferredA.promise();
 
-        setTimeout(deferredB.resolve, 20);
+        setTimeout(() => deferredB.resolve(value), 20);
         const awaited = await deferredB.promise();
 
         // Assert

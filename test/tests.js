@@ -42,7 +42,7 @@ function fakeAsyncFunction(test) {
 }
 describe("async/await", function () {
     var _this = this;
-    this.timeout(100);
+    this.timeout(350);
     it("executes in the correct order", fakeAsyncFunction(function (done) { return __awaiter(_this, void 0, void 0, function () {
         var order;
         return __generator(this, function (_a) {
@@ -169,7 +169,7 @@ describe("async/await", function () {
                     value = "value";
                     deferred = $.Deferred();
                     // Act
-                    setTimeout(deferred.resolve, 10);
+                    setTimeout(function () { return deferred.resolve(value); }, 10);
                     return [4 /*yield*/, deferred.promise()];
                 case 1:
                     awaited = _a.sent();
@@ -193,7 +193,7 @@ describe("async/await", function () {
                     return [4 /*yield*/, deferredA.promise()];
                 case 1:
                     _a.sent();
-                    setTimeout(deferredB.resolve, 20);
+                    setTimeout(function () { return deferredB.resolve(value); }, 20);
                     return [4 /*yield*/, deferredB.promise()];
                 case 2:
                     awaited = _a.sent();
