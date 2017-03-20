@@ -209,17 +209,19 @@ describe("async/await", function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    message = "This should be caught";
+                    message = "This should be caught synchronously";
                     promise = $.Deferred().resolve().promise()
                         .then(function () {
                         throw new Error(message);
                     });
                     // Assert
-                    return [4 /*yield*/, promise.catch(function (error) { return expect(error.message).to.be.equal(message); })];
+                    return [4 /*yield*/, promise.catch(function (error) {
+                            expect(error.message).to.be.equal(message);
+                            done();
+                        })];
                 case 1:
                     // Assert
                     _a.sent();
-                    done();
                     return [2 /*return*/];
             }
         });
@@ -229,7 +231,7 @@ describe("async/await", function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    message = "This should be caught";
+                    message = "This should be caught synchronously";
                     promise = $.Deferred().resolve().promise()
                         .then(function () { })
                         .then(function () {
@@ -250,7 +252,7 @@ describe("async/await", function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    message = "This should be caught";
+                    message = "This should be caught synchronously";
                     promise = $.Deferred().resolve().promise()
                         .then(function () {
                         throw new Error(message);
@@ -271,7 +273,7 @@ describe("async/await", function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    message = "This should be caught";
+                    message = "This should be caught asynchronously";
                     deferred = $.Deferred();
                     promise = deferred.promise()
                         .then(function () {
@@ -279,12 +281,13 @@ describe("async/await", function () {
                     });
                     setTimeout(deferred.resolve);
                     // Assert
-                    return [4 /*yield*/, promise
-                            .catch(function (error) { return chai.expect(error.message).to.be.equal(message); })];
+                    return [4 /*yield*/, promise.catch(function (error) {
+                            expect(error.message).to.be.equal(message);
+                            done();
+                        })];
                 case 1:
                     // Assert
                     _a.sent();
-                    done();
                     return [2 /*return*/];
             }
         });
@@ -294,7 +297,7 @@ describe("async/await", function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    message = "This should be caught";
+                    message = "This should be caught asynchronously";
                     deferred = $.Deferred();
                     promise = deferred.promise()
                         .then(function () {
@@ -318,7 +321,7 @@ describe("async/await", function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    message = "This should be caught";
+                    message = "This should be caught asynchronously";
                     deferred = $.Deferred();
                     promise = deferred.promise()
                         .then(function () { })

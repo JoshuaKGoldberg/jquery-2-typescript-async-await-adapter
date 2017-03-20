@@ -142,7 +142,7 @@ describe("async/await", function () {
 
     it("catches a synchronously thrown value", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
-        const message = "This should be caught";
+        const message = "This should be caught synchronously";
 
         // Act
         const promise = $.Deferred().resolve().promise()
@@ -151,13 +151,15 @@ describe("async/await", function () {
             });
 
         // Assert
-        await promise.catch(error => expect(error.message).to.be.equal(message));
-        done();
+        await promise.catch(error => {
+            expect(error.message).to.be.equal(message);
+            done();
+        });
     }));
 
     it("catches a synchronously thrown value after a chain", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
-        const message = "This should be caught";
+        const message = "This should be caught synchronously";
 
         // Act
         const promise = $.Deferred().resolve().promise()
@@ -173,7 +175,7 @@ describe("async/await", function () {
 
     it("catches a synchronously thrown value before a chain", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
-        const message = "This should be caught";
+        const message = "This should be caught synchronously";
 
         // Act
         const promise = $.Deferred().resolve().promise()
@@ -189,7 +191,7 @@ describe("async/await", function () {
 
     it("catches an asynchronously thrown value", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
-        const message = "This should be caught";
+        const message = "This should be caught asynchronously";
 
         // Act
         const deferred = $.Deferred();
@@ -201,14 +203,15 @@ describe("async/await", function () {
         setTimeout(deferred.resolve);
 
         // Assert
-        await promise
-            .catch(error => chai.expect(error.message).to.be.equal(message));
-        done();
+        await promise.catch(error => {
+            expect(error.message).to.be.equal(message);
+            done();
+        });
     }));
 
     it("catches an asynchronously thrown value before a chain", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
-        const message = "This should be caught";
+        const message = "This should be caught asynchronously";
 
         // Act
         const deferred = $.Deferred();
@@ -228,7 +231,7 @@ describe("async/await", function () {
 
     it("catches an asynchronously thrown value after a chain", fakeAsyncFunction(async (done: MochaDone) => {
         // Arrange
-        const message = "This should be caught";
+        const message = "This should be caught asynchronously";
 
         // Act
         const deferred = $.Deferred();
