@@ -1,6 +1,6 @@
 {
   "name": "jquery-2-typescript-async-await-adapter",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Adapts TypeScript's async/await to work with jQuery 2's JQueryPromise instead",
   "main": "lib/index.js",
   "repository": {
