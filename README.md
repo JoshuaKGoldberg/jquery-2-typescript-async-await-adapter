@@ -11,9 +11,9 @@ Include `lib/index.js` so that it's run before any code using the `await` keywor
 
 ## Technical Details
 
-TypeScript emits global `__awaiter` and `__generator` methods for `async/await` code.
-Those assume the existence of a `Promise` constructor and other sane standards.
-This library replaces them with near-identical versions that instead use `$.Deferred().promise()`.
+TypeScript emits a global `__awaiter` method for `async/await` code.
+It assumes the existence of a `Promise` constructor and other sane standards.
+This library replaces it with a similar versions that instead uses `$.Deferred().promise()`.
 
 
 ## Caveats
@@ -26,6 +26,8 @@ Standards-compliant Promise implementations are always asynchronous.
 Don't structure your code assuming `.then` callbacks are run synchronously.
 
 Because `.then` is synchronous, if an error is thrown synchronously in a `JQueryPromise`, any subsequent code (including `await`s) will not be run.
+That means you can't use `await` within `try` blocks on this adapter.
+Put the risky logic in a non-`async` function instead.
 
 
 ## Development
