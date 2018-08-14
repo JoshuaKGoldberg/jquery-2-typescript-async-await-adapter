@@ -21,7 +21,7 @@ This library replaces it with a similar versions that instead uses `$.Deferred()
 You should move to jQuery 3. It has standards-compliant Promises.
 This library should only be used as a polyfill while your team works on the update.
 
-jQuery 2's `.then` is synchronous by default but can by asynchronous.
+jQuery 2's `.then` is synchronous by default but can be asynchronous.
 Standards-compliant Promise implementations are always asynchronous.
 Don't structure your code assuming `.then` callbacks are run synchronously.
 
